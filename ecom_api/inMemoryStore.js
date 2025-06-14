@@ -1,4 +1,4 @@
-import { uuidv4 } from "uuid";
+import { v4 } from "uuid";
 
 //This store will be our in-memory store
 const store = {
@@ -31,21 +31,25 @@ const store = {
 store.products.set("product1", {
   id: "product1",
   name: "Laptop",
-  price: 1200.0,
+  price: 75000.0,
 });
 store.products.set("product2", { id: "product2", name: "Mouse", price: 25.5 });
 store.products.set("product3", {
   id: "product3",
   name: "Keyboard",
-  price: 75.0,
+  price: 1000.0,
 });
 store.products.set("product4", {
   id: "product4",
   name: "Monitor",
-  price: 300.0,
+  price: 10000.0,
 });
-store.products.set("product5", { id: "product5", name: "Webcam", price: 50.0 });
+store.products.set("product5", {
+  id: "product5",
+  name: "Webcam",
+  price: 2000.0,
+});
 
 console.log("Our In Memory Store has been initialised");
 
-module.exports = store;
+export default store;

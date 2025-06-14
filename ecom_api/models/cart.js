@@ -26,4 +26,4 @@ class Cart {
   }
 }
 
-module.exports = Cart;
+export default Cart;
