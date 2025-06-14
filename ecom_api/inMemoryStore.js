@@ -2,14 +2,14 @@ import { uuidv4 } from "uuid";
 
 //This store will be our in-memory store
 const store = {
-  //key=productId, value = product model
+  //key=>productId, value => product model
   products: new Map(),
 
   orders: new Map(),
-  // orderId -> { id, cartDetails, totalAmount, discountAmount, appliedCoupon, timestamp }
+  // key=>orderId value=> { id, cartDetails, totalAmount, discountAmount, appliedCoupon, timestamp }
 
   carts: new Map(),
-
+  // key=>cartId value=> { id, items: Map<productId, { productId, quantity, price }> }
   coupon: {
     activeCode: null,
     isActive: false,
@@ -17,7 +17,7 @@ const store = {
 
   // Metrics for admin reports
   metrics: {
-    totalItemsPurchased: 0,
+    totalItemsPurchased: 0, //Total items purchased so far
     totalPurchaseAmount: 0, // Sum of final amounts after discount
     totalDiscountAmount: 0, // Sum of all discounts given
     totalOrdersProcessed: 0, // Total count of successful checkouts
