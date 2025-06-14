@@ -24,6 +24,13 @@ class Cart {
     }
     return total;
   }
+  toObject() {
+    return {
+      id: this.id,
+      items: Array.from(this.items.values()),
+      total: this.calculateTotal(),
+    };
+  }
 }
 
 export default Cart;

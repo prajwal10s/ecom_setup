@@ -1,10 +1,12 @@
+import Product from "../models/product";
+
 class ProductService {
   constructor(store) {
     this.store = store;
   }
   /**
    *
-   * @returns {Array<Object>} List of Products from the store
+   * @returns {Array<Product>} List of Products from the store
    */
 
   getAllProducts() {
