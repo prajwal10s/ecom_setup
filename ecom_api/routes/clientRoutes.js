@@ -1,6 +1,6 @@
 import express from "express";
 import { v4 } from "uuid";
-const clientRoutes = (productService, cartService) => {
+const clientRoutes = (productService, cartService, orderService) => {
   const router = express.Router();
 
   //router endpoint to get all the products
@@ -60,6 +60,41 @@ const clientRoutes = (productService, cartService) => {
     }
   });
 
+  //router endpoint to get the cart details
+  router.get("/cart/:cartId", (req, res) => {
+    try {
+      const carId = req.params.cartId;
+      const cart = cartService.getCartDetails(cartId);
+      res.json(cart);
+    } catch (error) {
+      console.error(`Error getting cart details: ${error.message}`);
+      res.status(500).json({ error: "Internal server error." });
+    }
+  });
+
+  router.post("/checkout", (req, res) => {
+    const { cartId, couponCode } = req.body;
+
+    if (!cartId) {
+      return res
+        .status(400)
+        .json({ error: "cartId is required for checkout." });
+    }
+
+    try {
+      const order = orderService.checkout(cartId, couponCode);
+      res.status(201).json({
+        message: "Order placed successfully!",
+        order: order,
+      });
+    } catch (error) {
+      console.error(`Error during checkout: ${error.message}`);
+      if (error.message.includes("not found")) {
+        return res.status(404).json({ error: error.message });
+      }
+      res.status(400).json({ error: error.message });
+    }
+  });
   return router;
 };
 export default clientRoutes;

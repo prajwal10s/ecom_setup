@@ -76,3 +76,5 @@ class CartService {
     console.log(`Cart with id ${id} deleted`);
   }
 }
+
+export default CartService;
