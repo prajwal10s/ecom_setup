@@ -11,10 +11,10 @@ const port = process.env.PORT || 3000;
 
 // Instantiate service based on the shared store
 const productService = new ProductService(store);
-
+const cartService = new CartService(store);
 app.use(express.json()); // Middleware used for parsing JSON request bodies
 
-app.use("/api", clientRoutes(productService));
+app.use("/api", clientRoutes(productService, cartService));
 
 app.get("/", (req, res) => {
   res.send("Welcome to the E-commerce API!");
