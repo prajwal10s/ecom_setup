@@ -1,8 +1,9 @@
+import Order from "../models/order.js";
 class OrderService {
-  constructor(store, productService, couponService) {
+  constructor(store, cartService, couponService) {
     this.store = store;
-    this.productService = productService;
-    this.couponService = this.couponService;
+    this.cartService = cartService;
+    this.couponService = couponService;
   }
 
   /**
@@ -15,6 +16,7 @@ class OrderService {
    * @throws {Error}
    */
   checkout(cartId, couponCode) {
+    // console.log(`Cart Id in order service is ${cartId}`);
     const cart = this.store.carts.get(cartId);
     if (!cart) {
       throw new Error(`Cart with ID ${cartId} not found.`);
@@ -23,12 +25,13 @@ class OrderService {
       throw new Error("Cannot checkout an empty cart.");
     }
     let originalCartTotal = cart.calculateTotal();
+    console.log(originalCartTotal);
     let discountAmount = 0.0;
     let appliedCoupon = null;
 
     // Validate and apply discount if couponCode is provided
     if (couponCode) {
-      if (this.couponService.validateAndConsumeCoupon(couponCode)) {
+      if (this.couponService.validateAndUseCoupon(couponCode)) {
         discountAmount = originalCartTotal * 0.1; // 10% discount
         appliedCoupon = couponCode;
         this.store.metrics.totalDiscountAmount += discountAmount; // Update total discount
@@ -41,7 +44,6 @@ class OrderService {
         console.warn(
           `[OrderService] Invalid or already used coupon code: ${couponCode}. No discount applied.`
         );
-        // You might choose to throw an error here, but for now, we just proceed without discount.
       }
     }
 
@@ -64,7 +66,7 @@ class OrderService {
     this.store.metrics.totalOrdersProcessed++; // Increment total order count
 
     // Clear the cart after successful checkout
-    this.cartService.clearCart(cartId);
+    this.store.carts.delete(cartId);
 
     console.log(
       `[OrderService] Order ${
@@ -80,13 +82,11 @@ class OrderService {
       0
     ) {
       // Attempt to generate a new coupon. The couponService will check if one is already available.
-      const newCode = this.couponService.generateDiscountCodeIfApplicable();
+      const newCode = this.couponService.generateCouponCodeIfApplicable();
       if (newCode) {
         console.log(
           `[OrderService] Nth order condition met! New coupon generated: ${newCode}`
         );
-        // In a real app, you'd communicate this to the user (e.g., email, notification)
-        // For this API, it's logged and available via admin metrics.
       }
     }
 

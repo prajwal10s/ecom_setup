@@ -6,6 +6,7 @@ import clientRoutes from "./routes/clientRoutes.js";
 import CartService from "./services/cartService.js";
 import CouponService from "./services/couponService.js";
 import OrderService from "./services/OrderService.js";
+import adminRoutes from "./routes/adminRoutes.js";
 const app = express();
 
 dotenv.config();
@@ -15,11 +16,12 @@ const port = process.env.PORT || 3000;
 const productService = new ProductService(store);
 const cartService = new CartService(store, productService);
 const couponService = new CouponService(store);
-const orderService = new OrderService(store, productService, couponService);
+const orderService = new OrderService(store, cartService, couponService);
 
 app.use(express.json()); // Middleware used for parsing JSON request bodies
 
-app.use("/api", clientRoutes(productService, cartService));
+app.use("/api", clientRoutes(productService, cartService, orderService));
+app.use("/api", adminRoutes(couponService, store));
 
 app.get("/", (req, res) => {
   res.send("Welcome to the E-commerce API!");

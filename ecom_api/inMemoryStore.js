@@ -33,7 +33,11 @@ store.products.set("product1", {
   name: "Laptop",
   price: 75000.0,
 });
-store.products.set("product2", { id: "product2", name: "Mouse", price: 25.5 });
+store.products.set("product2", {
+  id: "product2",
+  name: "Mouse",
+  price: 2500.0,
+});
 store.products.set("product3", {
   id: "product3",
   name: "Keyboard",

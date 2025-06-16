@@ -19,8 +19,8 @@ class Cart {
   }
   calculateTotal() {
     let total = 0;
-    for (const item of this.items.values) {
-      total += total.quantity * total.price;
+    for (const item of this.items.values()) {
+      total += item.quantity * item.price;
     }
     return total;
   }

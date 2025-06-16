@@ -23,6 +23,7 @@ const clientRoutes = (productService, cartService, orderService) => {
   router.get("/cart", (req, res) => {
     try {
       const cartId = req.query.cartId;
+      //if cartId is given then we get existing cart otherwise new cart is created with Object
       const cart = cartService.getOrCreateCart(cartId);
       res.send(cart.toObject());
     } catch (error) {
@@ -44,7 +45,7 @@ const clientRoutes = (productService, cartService, orderService) => {
         .status(400)
         .json({ error: "cartId, productId, and quantity are required." });
     }
-    if (typeof quantity !== number || quantity <= 0) {
+    if (typeof quantity !== "number" || quantity <= 0) {
       return res.status(400).json({ error: "Quantity invalid" });
     }
     try {
@@ -63,7 +64,7 @@ const clientRoutes = (productService, cartService, orderService) => {
   //router endpoint to get the cart details
   router.get("/cart/:cartId", (req, res) => {
     try {
-      const carId = req.params.cartId;
+      const cartId = req.params.cartId;
       const cart = cartService.getCartDetails(cartId);
       res.json(cart);
     } catch (error) {
@@ -74,7 +75,7 @@ const clientRoutes = (productService, cartService, orderService) => {
 
   router.post("/checkout", (req, res) => {
     const { cartId, couponCode } = req.body;
-
+    // console.log(`Cart Id is ${cartId}`);
     if (!cartId) {
       return res
         .status(400)

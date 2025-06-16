@@ -1,7 +1,7 @@
-const { v4: uuidv4 } = require("uuid");
+import { v4 } from "uuid";
 class Order {
   constructor(cartDetails, finalAmount, discountAmount, appliedCoupon) {
-    this.id = uuidv4();
+    this.id = v4();
     this.cartDetails = cartDetails; // details from the cart at checkout
     this.totalAmount = cartDetails.total; //  Total before discount
     this.finalAmount = finalAmount; // Total after discount

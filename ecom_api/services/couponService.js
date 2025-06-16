@@ -31,19 +31,20 @@ class CouponService {
     const couponState = this.store.coupon;
     const N_THRESHOLD = this.store.NTH_ORDER_THRESHOLD;
 
-    // Condition Check:
+    // Condition to be checked:
     // 1. Is totalOrdersProcessed a multiple of N? (Only if > 0)
     // 2. Even if the previous one wasn't used we replace it with the new coupon code
+
     if (
       metrics.totalOrdersProcessed > 0 &&
       metrics.totalOrdersProcessed % N_THRESHOLD === 0
     ) {
-      return this.generateNewCouponCode(); // Generate if conditions are met and set the isAvailable to true
+      return this.generateNewCouponCode(); // Generate if conditions are met and set the isAvailable to true from the rbaove internal function
     }
     console.log(
       `[CouponService] Admin generation request: Condition not met (Orders: ${metrics.totalOrdersProcessed}, N: ${N_THRESHOLD})`
     );
-    return null; // Condition not met, no code generated
+    return null; // Condition not met, no code generated and returned null
   }
 
   /**
@@ -56,7 +57,8 @@ class CouponService {
     const currentCouponState = this.store.coupon;
 
     if (
-      (inputCoupon && inputCoupon === currentCouponState.activeCode) ||
+      inputCoupon &&
+      inputCoupon === currentCouponState.activeCode &&
       currentCouponState.isAvailable
     ) {
       currentCouponState.isAvailable = false;
