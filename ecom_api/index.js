@@ -7,6 +7,7 @@ import CartService from "./services/cartService.js";
 import CouponService from "./services/couponService.js";
 import OrderService from "./services/OrderService.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import cors from "cors";
 const app = express();
 
 dotenv.config();
@@ -17,8 +18,12 @@ const productService = new ProductService(store);
 const cartService = new CartService(store, productService);
 const couponService = new CouponService(store);
 const orderService = new OrderService(store, cartService, couponService);
-
+const corsOptions = {
+  origin: "http://localhost:5173",
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 app.use(express.json()); // Middleware used for parsing JSON request bodies
+app.use(cors(corsOptions));
 
 app.use("/api", clientRoutes(productService, cartService, orderService));
 app.use("/api", adminRoutes(couponService, store));
